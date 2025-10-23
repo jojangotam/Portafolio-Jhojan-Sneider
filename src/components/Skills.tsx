@@ -63,15 +63,16 @@ export function Skills() {
                          h-28 sm:h-auto p-3 sm:p-6 flex items-center justify-center sm:block"
               style={{
                 background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.7) 0%, rgba(255, 153, 51, 0.25) 50%, rgba(26, 26, 26, 0.7) 100%)',
-                borderColor: 'rgba(255, 153, 51, 0.3)'
+                borderColor: 'rgba(255, 153, 51, 0.3)',
+                willChange: 'transform'
               }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.05 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.4, delay: index * 0.03 }}
               onMouseEnter={() => setHoveredSkill(index)}
               onMouseLeave={() => setHoveredSkill(null)}
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.02 }}
             >
               {/* Vista móvil: solo icono + nivel */}
               <div className="flex flex-col items-center justify-center sm:hidden text-center">
@@ -109,21 +110,22 @@ export function Skills() {
                   </span>
                 </div>
 
-                {/* Progress bar */}
-                <div className="relative mb-4">
-                  <div className="w-full bg-background/50 rounded-full h-2 overflow-hidden">
-                    <motion.div 
-                      className="h-2 rounded-full relative"
-                      style={{
-                        background: 'linear-gradient(90deg, #ff9933 0%, #ffcc55 100%)'
-                      }}
-                      initial={{ width: '0%' }}
-                      whileInView={{ width: `${skill.level}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.2, ease: "easeOut" }}
-                    />
+                  <div className="relative mb-4">
+                    <div className="w-full bg-background/50 rounded-full h-2 overflow-hidden">
+                      <motion.div 
+                        className="h-2 rounded-full relative"
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: skill.level / 100 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.05 }}
+                        style={{ 
+                          transformOrigin: 'left',
+                          background: 'linear-gradient(90deg, #ff9933 0%, #ffcc55 100%)',
+                          willChange: 'transform'
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
 
                 <p className="text-sm text-foreground/80 mb-4">{skill.description}</p>
 

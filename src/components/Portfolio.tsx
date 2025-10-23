@@ -1,11 +1,21 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 
 export function Portfolio() {
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [preloadedGifs, setPreloadedGifs] = useState<Set<string>>(new Set());
+
+  // Preload GIF cuando se hace hover
+  const preloadGif = (gifUrl: string) => {
+    if (!preloadedGifs.has(gifUrl)) {
+      const img = new Image();
+      img.src = gifUrl;
+      setPreloadedGifs(prev => new Set([...prev, gifUrl]));
+    }
+  };
 
   const categories = ["Todos", "Motion Graphics", "3D Animation", "VFX", "Brand Identity"] as const;
 
@@ -103,16 +113,14 @@ export function Portfolio() {
 
   return (
     <section id="proyectos" className="py-24 px-6 relative overflow-hidden">
-      {/* Background Effects */}
+      {/* Background Effects - Estático para mejor rendimiento */}
       <div className="absolute inset-0">
-        <motion.div
-          className="absolute top-0 left-1/4 w-96 h-96 rounded-full"
+        <div
+          className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-80"
           style={{
             background: 'radial-gradient(circle, rgba(0, 255, 255, 0.08) 0%, transparent 70%)',
             filter: 'blur(80px)',
           }}
-          animate={{ x: [-50, 50, -50], y: [-30, 30, -30] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
@@ -163,24 +171,31 @@ export function Portfolio() {
         </motion.div>
 
         {/* Projects (Carrusel en móvil / Grid en desktop) */}
-        <motion.div 
-          className="flex gap-6 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible"
-          layout
-        >
+        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible">
           {filteredProjects.map((project, index) => (
-            <a
+            <motion.a
               key={project.title}
               href={project.videoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="min-w-[80%] md:min-w-0 snap-center rounded-xl border border-border overflow-hidden group hover:border-primary/50 transition-all duration-500 relative orange-hover-glow"
+              className="min-w-[80%] md:min-w-0 snap-center rounded-xl border border-border overflow-hidden group hover:border-primary/50 transition-all duration-300 relative orange-hover-glow"
               style={{
                 background: index % 4 === 2 
                   ? 'linear-gradient(45deg, rgba(26, 26, 26, 0.6) 0%, rgba(255, 170, 68, 0.1) 30%, rgba(26, 26, 26, 0.6) 100%)'
-                  : 'rgba(26, 26, 26, 0.4)'
+                  : 'rgba(26, 26, 26, 0.4)',
+                willChange: 'transform'
               }}
-              onMouseEnter={() => setHoveredProject(index)}
+              onMouseEnter={() => {
+                setHoveredProject(index);
+                const gifUrl = hoverGifs[project.title] || (project as any).hoverGif;
+                if (gifUrl) preloadGif(gifUrl);
+              }}
               onMouseLeave={() => setHoveredProject(null)}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+              whileHover={{ scale: 1.02 }}
             >
               {/* Project Image */}
                 <div className="relative aspect-video overflow-hidden">
@@ -222,34 +237,30 @@ export function Portfolio() {
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.tools.map((tool, toolIndex) => (
-                    <motion.span
+                    <span
                       key={tool}
-                      className="text-xs bg-primary/10 text-primary px-2 py-1 rounded border border-primary/30"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={hoveredProject === index ? { opacity: 1, scale: 1 } : { opacity: 0.7, scale: 0.9 }}
-                      transition={{ delay: toolIndex * 0.05, duration: 0.2 }}
+                      className={`text-xs bg-primary/10 text-primary px-2 py-1 rounded border border-primary/30 transition-opacity duration-200 ${
+                        hoveredProject === index ? 'opacity-100' : 'opacity-70'
+                      }`}
                     >
                       {tool}
-                    </motion.span>
+                    </span>
                   ))}
                 </div>
-                <motion.div
-                  className="flex gap-2"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={hoveredProject === index ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                  transition={{ duration: 0.3 }}
-                >
+                <div className={`flex gap-2 transition-all duration-300 ${
+                  hoveredProject === index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                }`}>
                   <span className="flex-1 bg-primary/20 border border-primary text-primary py-2 rounded-lg text-sm flex items-center justify-center select-none cursor-pointer opacity-70">
                     Ver Proyecto
                   </span>
                   <button className="px-4 py-2 border border-border text-foreground/70 rounded-lg text-sm hover:border-primary/50 hover:text-primary transition-colors" onClick={e => e.preventDefault()}>
                     Info
                   </button>
-                </motion.div>
+                </div>
               </div>
-            </a>
+            </motion.a>
           ))}
-        </motion.div>
+        </div>
 
         {/* CTA removed */}
       </div>
