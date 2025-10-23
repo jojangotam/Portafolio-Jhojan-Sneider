@@ -98,7 +98,7 @@ export function About() {
               }}
             >
               <img
-                src="/src/assets/Retratooptimizado.png"
+                src="/Retratooptimizado.png"
                 alt="Jhojan Sneider - Motion Graphics Specialist y Técnico en Audiovisuales"
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                 loading="lazy"
@@ -106,7 +106,7 @@ export function About() {
                 onError={(e) => {
                   // Fallback en caso de error
                   const target = e.target as HTMLImageElement;
-                  target.src = "/src/assets/5b6b143d5a60f047eba85ed840c0696a46daf3f4.png";
+                  target.src = "/444321.png";
                 }}
               />
               {/* Overlay simplificado */}

@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import logoImage from "@/assets/logooptimizado.png";
-import backgroundImage from "@/assets/444321.png";
 
 export function Hero() {
   const skills = ["Efectos visuales", "Modelado 3D", "Ilustracion"];
@@ -10,7 +8,7 @@ export function Hero() {
   // Precargar imagen inmediatamente para móviles
   useEffect(() => {
     const img = new Image();
-    img.src = logoImage;
+    img.src = "/logooptimizado.png";
   }, []);
 
   useEffect(() => {
@@ -34,12 +32,12 @@ export function Hero() {
     >
       {/* Imagen de fondo */}
       <img
-        src={backgroundImage}
+        src="/444321.png"
         alt="Background"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ objectPosition: 'left', objectFit: 'cover' }}
         onError={(e) => {
-          console.error("Error loading background image:", backgroundImage);
+          console.error("Error loading background image:", "/444321.png");
           e.currentTarget.style.display = 'none';
         }}
       />
@@ -62,7 +60,7 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <motion.img
-              src={logoImage}
+              src="/logooptimizado.png"
               alt="Sneider Productions Logo"
               className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 object-contain"
               style={{
