@@ -98,15 +98,18 @@ export function About() {
               }}
             >
               <img
-                src="/Retratooptimizado.png"
+                src="/profile.png"
                 alt="Jhojan Sneider - Motion Graphics Specialist y Técnico en Audiovisuales"
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                 loading="lazy"
                 decoding="async"
+                onLoad={() => console.log("✅ Imagen cargada exitosamente: /profile.png")}
                 onError={(e) => {
+                  console.error("❌ Error cargando imagen: /profile.png");
                   // Fallback en caso de error
                   const target = e.target as HTMLImageElement;
                   target.src = "/444321.png";
+                  console.log("🔄 Usando imagen fallback: /444321.png");
                 }}
               />
               {/* Overlay simplificado */}
