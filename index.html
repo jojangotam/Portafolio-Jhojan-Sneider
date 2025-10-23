@@ -1,0 +1,22 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Personal Portfolio Website</title>
+      <!-- Optimizaciones para móvil y Vercel -->
+      <meta name="theme-color" content="#000000">
+      <meta name="mobile-web-app-capable" content="yes">
+      <!-- Preload crítico del logo optimizado para móvil -->
+      <link rel="preload" href="/src/assets/logooptimizado.png" as="image" type="image/png" fetchpriority="high">
+      <!-- DNS prefetch para optimizar Vercel -->
+      <link rel="dns-prefetch" href="//vercel.app">
+    </head>
+
+    <body>
+      <div id="root"></div>
+      <script type="module" src="/src/main.tsx"></script>
+    </body>
+  </html>
+  

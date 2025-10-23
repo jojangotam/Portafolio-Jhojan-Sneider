@@ -1,0 +1,29 @@
+{
+  "buildCommand": "npm rebuild && npm run build",
+  "outputDirectory": "build",
+  "framework": null,
+  "headers": [
+    {
+      "source": "/src/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/src/assets/logooptimizado.png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
+  ]
+}
